@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Composition;
 using System.Linq;
 using System.Threading.Tasks;
-using ArchiSteamFarm.Json;
-using ArchiSteamFarm.Plugins;
+using ArchiSteamFarm.Core;
+using ArchiSteamFarm.Plugins.Interfaces;
+using ArchiSteamFarm.Steam;
+using ArchiSteamFarm.Steam.Data;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using SteamKit2;
 
 namespace ArchiSteamFarm.CustomPlugins.Setu
 {
+	
 	[Export(typeof(IPlugin))]
-
 	internal sealed class RandomSetu : IASF, IBot, IBotCommand, IBotConnection, IBotFriendRequest, IBotMessage, IBotModules, IBotTradeOffer
 	{
 		public string Name => nameof(RandomSetu);
@@ -49,6 +51,9 @@ namespace ArchiSteamFarm.CustomPlugins.Setu
 				case "SETU":
 					string? randomSetuURL = await SetuAPI.GetRandomSetuURL(bot.ArchiWebHandler.WebBrowser).ConfigureAwait(false);
 					return !string.IsNullOrEmpty(randomSetuURL) ? randomSetuURL : "哇哦，不好意思，好像并未寻找到色图qwq";
+				case "R18":
+					string? randomSetuR18URL = await SetuAPI.GetRandomSetuR18URL(bot.ArchiWebHandler.WebBrowser).ConfigureAwait(false);
+					return !string.IsNullOrEmpty(randomSetuR18URL) ? randomSetuR18URL : "哇哦，不好意思，好像并未寻找到色图qwq";
 				default:
 					return null;
 			}
@@ -63,7 +68,7 @@ namespace ArchiSteamFarm.CustomPlugins.Setu
 		public void OnBotInit(Bot bot)
 		{
 			bot.ArchiLogger.LogGenericInfo("机器人：" + bot.BotName + " 已经加载，并包括了插件： " + nameof(RandomSetu) + "!");
-			ASF.ArchiLogger.LogGenericWarning("不稳定建构，请务必注意！");
+			ASF.ArchiLogger.LogGenericWarning("不稳定建构，请务必注意！适用于版本v5.1.5.0");
 		}
 
 		public async void OnBotInitModules(Bot bot, IReadOnlyDictionary<string, JToken>? additionalConfigProperties = null)
@@ -90,7 +95,7 @@ namespace ArchiSteamFarm.CustomPlugins.Setu
 			return Task.FromResult((string?)"");
 		}
 
-		public Task<bool> OnBotTradeOffer(Bot bot, Steam.TradeOffer tradeOffer) => Task.FromResult(bot.BotName.StartsWith("TrashBot", StringComparison.OrdinalIgnoreCase));
+		public Task<bool> OnBotTradeOffer(Bot bot, TradeOffer tradeOffer) => Task.FromResult(bot.BotName.StartsWith("TrashBot", StringComparison.OrdinalIgnoreCase));
 
 		public void OnLoaded()
 		{

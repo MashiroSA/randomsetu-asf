@@ -8,8 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="ConfigureAwaitChecker.Analyzer" PrivateAssets="all" Version="5.0.0" />
-    <PackageReference Include="Newtonsoft.Json" IncludeAssets="compile" Version="*" />
-    <PackageReference Include="SteamKit2" IncludeAssets="compile" Version="*" />
+    <PackageReference Include="Newtonsoft.Json" IncludeAssets="compile" Version="13.0.1" />
+    <PackageReference Include="SteamKit2" IncludeAssets="compile" Version="2.4.0-Alpha.3" />
     <PackageReference Include="System.Composition.AttributedModel" IncludeAssets="compile" Version="*" />
   </ItemGroup>
 
@@ -18,6 +18,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ArchiSteamFarm\ArchiSteamFarm\ArchiSteamFarm.csproj" ExcludeAssets="all" Private="false"/>
+    <ProjectReference Include="..\ArchiSteamFarm\ArchiSteamFarm\ArchiSteamFarm.csproj" ExcludeAssets="all" Private="false" />
   </ItemGroup>
 </Project>
