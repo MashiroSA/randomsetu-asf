@@ -5,6 +5,7 @@ using ArchiSteamFarm;
 using ArchiSteamFarm.IPC.Controllers.Api;
 using ArchiSteamFarm.IPC.Responses;
 using Microsoft.AspNetCore.Mvc;
+using ArchiSteamFarm.Core;
 
 namespace ArchiSteamFarm.CustomPlugins.Setu
 {
