@@ -15,7 +15,7 @@ namespace ArchiSteamFarm.CustomPlugins.Setu
 {
 	
 	[Export(typeof(IPlugin))]
-	internal sealed class RandomSetu : IASF, IBot, IBotCommand, IBotConnection, IBotFriendRequest, IBotMessage, IBotModules, IBotTradeOffer
+	internal sealed class RandomSetu : IASF, IBot, IBotCommand2, IBotConnection, IBotFriendRequest, IBotMessage, IBotModules, IBotTradeOffer
 	{
 		public string Name => nameof(RandomSetu);
 
@@ -24,11 +24,11 @@ namespace ArchiSteamFarm.CustomPlugins.Setu
 		[JsonProperty]
 		public bool CustomIsEnabledField { get; private set; } = true;
 
-		public void OnASFInit(IReadOnlyDictionary<string, JToken>? additionalConfigProperties = null)
+		public Task OnASFInit(IReadOnlyDictionary<string, JToken>? additionalConfigProperties = null)
 		{
 			if (additionalConfigProperties == null)
 			{
-				return;
+				return Task.CompletedTask;
 			}
 
 			foreach (KeyValuePair<string, JToken> configProperty in additionalConfigProperties)
@@ -42,9 +42,10 @@ namespace ArchiSteamFarm.CustomPlugins.Setu
 						break;
 				}
 			}
+			return Task.CompletedTask;
 		}
 
-		public async Task<string?> OnBotCommand(Bot bot, ulong steamID, string message, string[] args)
+		public async Task<string?> OnBotCommand(Bot bot, EAccess access, string message, string[] args, ulong steamID = 0)
 		{
 			switch (args[0].ToUpperInvariant())
 			{
@@ -58,27 +59,22 @@ namespace ArchiSteamFarm.CustomPlugins.Setu
 					return null;
 			}
 		}
-
-		public void OnBotDestroy(Bot bot) { }
-
-		public void OnBotDisconnected(Bot bot, EResult reason) { }
-
+		public Task OnBotLoggedOn(Bot bot) => Task.CompletedTask;
+		
 		public Task<bool> OnBotFriendRequest(Bot bot, ulong steamID) => Task.FromResult(true);
 
-		public void OnBotInit(Bot bot)
+		public Task OnBotInit(Bot bot)
 		{
-			bot.ArchiLogger.LogGenericInfo("机器人：" + bot.BotName + " 已经加载，并包括了插件： " + nameof(RandomSetu) + "!");
-			ASF.ArchiLogger.LogGenericWarning("不稳定建构，请务必注意！适用于版本v5.1.5.0");
+			bot.ArchiLogger.LogGenericInfo("欢迎您：" + bot.BotName + " 。已经加载插件 " + nameof(RandomSetu) + "!");
+			ASF.ArchiLogger.LogGenericWarning("不稳定建构，请务必注意！适用于版本v5.2.2.5");
+			return Task.CompletedTask;
 		}
 
-		public async void OnBotInitModules(Bot bot, IReadOnlyDictionary<string, JToken>? additionalConfigProperties = null)
+		public async Task OnBotInitModules(Bot bot, IReadOnlyDictionary<string, JToken>? additionalConfigProperties = null)
 		{
 			bot.ArchiLogger.LogGenericInfo("Pausing this bot as asked from the plugin");
 			await bot.Actions.Pause(true).ConfigureAwait(false);
 		}
-
-		
-		public void OnBotLoggedOn(Bot bot) { }
 
 		public Task<string?> OnBotMessage(Bot bot, ulong steamID, string message)
 		{
@@ -91,16 +87,20 @@ namespace ArchiSteamFarm.CustomPlugins.Setu
 			{
 				return Task.FromResult<string?>(null);
 			}
-			
 			return Task.FromResult((string?)"");
 		}
 
 		public Task<bool> OnBotTradeOffer(Bot bot, TradeOffer tradeOffer) => Task.FromResult(bot.BotName.StartsWith("TrashBot", StringComparison.OrdinalIgnoreCase));
 
-		public void OnLoaded()
+		public Task OnLoaded()
 		{
 			ASF.ArchiLogger.LogGenericInfo("机器人加载插件：" + nameof(OnLoaded) + "() method 调用");
 			ASF.ArchiLogger.LogGenericInfo("祝你好运！");
+			return Task.CompletedTask;
 		}
+		
+		public Task OnBotDestroy(Bot bot) => Task.CompletedTask;
+		public Task OnBotDisconnected(Bot bot, EResult reason) => Task.CompletedTask;
+
 	}
 }
